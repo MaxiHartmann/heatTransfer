@@ -17,7 +17,7 @@ s2 = 0.01       # [m]
 s3 = 0.01       # [m]
 
 alpha_i = 1e9   # [W/m2K]
-alpha_a = 5     # [W/m2K]
+alpha_a = 25     # [W/m2K]
 
 # thermal conductivity
 lambda_1 = 17   # [W/(mK)] 
@@ -39,7 +39,6 @@ plt.plot([r_1i, r_1i, r_2i, r_2i], [0, 400, 400, 0], color='blue', linewidth=2, 
 plt.plot([r_3i, r_3i, r_3a, r_3a], [0, 400, 400, 0], color='blue', linewidth=2, label='layer 3')
 plt.plot([r_2i, r_2i, r_3i, r_3i], [0, 400, 400, 0], color='red', linewidth=1, label='layer 2')
 plt.legend()
-# plt.axis('equal')
 plt.xlim(0, 0.2)
 plt.ylim(270, 370)
 
@@ -54,6 +53,16 @@ plt.plot(r_2, T_2, label='T(r)')
 r_3 = np.linspace(r_3i, r_3a, 20)
 T_3 = T_2[-1] - Q/(lambda_3 * 2 * np.pi * height) * np.log(r_3 / r_3i)
 plt.plot(r_3, T_3, label='T(r)')
+r_w = r_3a
+
+q = Q/(np.pi * r_w * r_w)
+T_inf = T_3[-1] - q / alpha_a
+plt.plot([r_3[-1], 2*r_3[-1]], [T_inf, T_inf], label='T_inf')
+
+# alpha = lambda_lam_air / thickness_T
+lambda_lam_air = 0.02572 # [W/(mK)]
+thickness_T = lambda_lam_air / alpha_a
+print("thermal boundary layer thickness = {:.5f} m".format(thickness_T))
 
 
 # TODO: profile of T in boundary layer...
